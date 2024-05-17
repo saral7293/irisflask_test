@@ -15,19 +15,18 @@ def predict():
     data = request.get_json()
     try:
         # Extract the features from the JSON object
-        features = data['features']
-        if len(features) != 4:
-            raise ValueError("Incorrect number of features")
-
-        feature1, feature2, feature3, feature4 = map(float, features)
-    except (KeyError, TypeError, ValueError) as e:
-        return jsonify({"error": f"Invalid input data: {str(e)}"}), 400
+        feature1 = float(data['feature1'])
+        feature2 = float(data['feature2'])
+        feature3 = float(data['feature3'])
+        feature4 = float(data['feature4'])
+    except (KeyError, TypeError, ValueError):
+        return jsonify({"error": "Invalid input data"}), 400
 
     # Make predictions using the loaded model
     prediction = model.predict([[feature1, feature2, feature3, feature4]])
 
     # Return the prediction as JSON
-    return jsonify({"prediction": int(prediction[0])})
+    return jsonify({"prediction": prediction[0]})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)  # Set debug=False in a production environment.
+    app.run(host='0.0.0.0',debug=False)
